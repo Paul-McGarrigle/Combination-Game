@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Paul McGarrigle D16125349 2015 Summer Exam</title>
+</head>
+<body>
+	<!-- Declare HTML Elements -->
+	<div id="div">
+		<table align="center" border="0" id="table1">
+			<tbody id = "table">
+			
+			</tbody>
+		</table>
+	</div>
+	<p id = "p"></p>
+	<p id = "p2"></p>
+	<button id = "btn">Start</button>
+</body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- JavaScript file -->
+	<script>
+		document.getElementById("btn").addEventListener("click", function(){ start() });
+		var sec = 0, rowCounter = 0, colCounter = 0, countRed = 0, countGreen = 0, countBlue = 0;
+		var countOrange = 0, countYellow = 0, countPurple = 0,countMaroon = 0, countPink = 0, countGrey = 0;;
+		var previous = null, current = null, first = true, countWin = 0, timer;
+		
+		function myTimer() 
+		{
+			sec++;
+			document.getElementById("p").innerHTML = sec;
+		}
+		
+		function start(){
+			timer = setInterval(function(){ myTimer() }, 1000);
+			var checkC = getCookie("Time_Cookie");
+			if(checkC == ""){
+				setCookie("Time_Cookie", 0)
+			}
+			document.getElementById("p2").innerHTML = "Current Quickest Time is: " + checkC;
+			
+			for(var i = 1; i < 7; i++){
+				var row = document.createElement("TR");
+				row.id = i;
+				document.getElementById("table").appendChild(row);
+				
+				for(var j = i*6+1; j < i*6+7; j++){
+					var col = document.createElement("td");
+					col.id = j;
+					document.getElementById(i).appendChild(col);
+					color(col);
+					col.setAttribute("width", "100px");
+					col.setAttribute("height", "100px");
+					col.addEventListener("click", function(){ check(this) });
+				}
+			}	
+		}
+		
+		function gameOver(){
+			$("#table1").hide('slow');
+			clearInterval(timer);
+			document.getElementById("p").innerHTML = "";
+			document.getElementById("p2").innerHTML = "";
+			console.log(sec);
+			if(sec < getCookie("Time_Cookie")){
+				setCookie("Time_Cookie", sec)
+			}
+			
+		}
+		
+		function setCookie(cname, cvalue){
+			var d = new Date();
+			d.setTime(d.getTime()+(365*24*60*60*1000));  
+			//in milliseconds        
+			var expires = "expires="+d.toUTCString();        
+			document.cookie = cname+"="+cvalue+";  "+expires; 
+		} 
+		
+		function getCookie(cname){       
+			var name = cname + "=";        
+			var ca = document.cookie.split(';');        
+			for(var i=0; i<ca.length; i++) {                   
+				var c = ca[i].trim();                 
+				if (c.indexOf(name)==0) return c.substring(name.length,c.length);     
+				}        
+			return ""; 
+		}
+		
+		function check(col){
+			if(current == null){
+				current = col
+			}else if(previous == null){
+				previous = col
+				if(previous != null && previous.style.backgroundColor == current.style.backgroundColor){
+					current.style.backgroundColor = "black";
+					previous.style.backgroundColor = "black";
+					console.log("Match");
+					countWin++;
+					if(countWin == 18)
+					{
+						gameOver();
+					}
+				}else{
+					console.log("No Match")
+				}
+				
+				previous = null;
+				current = null;
+			}
+
+			
+		}
+		
+		function color(col){
+			//Shuffle Array at start and use td id as index value +1
+			var colors = ['red', 'green', 'blue', 'orange', 'yellow', 'purple', 'maroon', 'pink', 'grey'];
+	
+			var currentColor = colors[Math.floor(Math.random() * colors.length)];
+			if(currentColor == "red"){
+				countRed++;
+				if(countRed > 4){
+					currentColor = color(col);
+				}
+			}else if(currentColor == "green"){
+				countGreen++;
+				if(countGreen > 4){
+					currentColor = color(col);
+				}
+			}else if(currentColor == "blue"){
+				countBlue++;
+				if(countBlue > 4){
+					currentColor = color(col);
+				}
+			}else if(currentColor == "orange"){
+				countOrange++;
+				if(countOrange > 4){
+					currentColor = color(col);
+				}
+			}else if(currentColor == "yellow"){
+				countYellow++;
+				if(countYellow > 4){
+					currentColor = color(col);
+				}
+			}else if(currentColor == "purple"){
+				countPurple++;
+				if(countPurple > 4){
+					currentColor = color(col);
+				}
+			}else if(currentColor == "maroon"){
+				countMaroon++;
+				if(countMaroon > 4){
+					currentColor = color(col);
+				}
+			}else if(currentColor == "pink"){
+				countPink++;
+				if(countPink > 4){
+					currentColor = color(col);
+				}
+			}else if(currentColor == "grey"){
+				countGrey++;
+				if(countGrey > 4){
+					currentColor = color(col);
+				}
+			}
+			
+			col.style.backgroundColor = currentColor;
+		}
+		
+		
+	</script>
+<footer>
+</footer>
+</html>
